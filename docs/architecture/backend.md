@@ -24,8 +24,10 @@ Despite the name, this app handles **Notes and Categories** (renamed from the or
 | ----------------- | ---------------------------------------------------- |
 | `models.py`       | Category and Note models                             |
 | `serializers.py`  | CategorySerializer (with note_count), NoteSerializer (with category_name, category_color) |
-| `views.py`        | CategoryListCreateView, CategoryDetailView, NoteListCreateView, NoteDetailView |
-| `urls.py`         | Routes under `/api/categories/` and `/api/notes/`    |
+| `views.py`        | CategoryListView (read-only), NoteListCreateView, NoteDetailView |
+| `urls.py`         | Routes under `/api/categories/` (GET only) and `/api/notes/` |
+
+Categories are **global and seeded** via data migration — no create/delete endpoints.
 
 ## Authentication Flow
 

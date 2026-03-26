@@ -1,6 +1,6 @@
 # Feature Docs — Agent Memory
 
-Last Updated: 2026-03-25 (initial project setup, full-stack notes app)
+Last Updated: 2026-03-25 (global seeded categories, CLAUDE.md files, error handling)
 
 ---
 
@@ -9,7 +9,8 @@ Last Updated: 2026-03-25 (initial project setup, full-stack notes app)
 | Doc Path                             | Topic                                                                  | Last Updated |
 | ------------------------------------ | ---------------------------------------------------------------------- | ------------ |
 | `docs/features/auth.md`             | Auth — email-based signup/login, JWT in HTTP-only cookies, BFF pattern  | 2026-03-25   |
-| `docs/features/notes.md`            | Notes & Categories — CRUD, auto-save, category colors, filtering       | 2026-03-25   |
+| `docs/features/notes.md`            | Notes & Categories — CRUD, auto-save, global seeded categories         | 2026-03-25   |
+| `docs/plans/frontend-tests.md`     | Frontend test plan — Vitest unit + Playwright e2e                      | 2026-03-25   |
 | `docs/features/ui-design-system.md` | Design system — Figma colors, fonts, UI components (Paper, Select, etc)| 2026-03-25   |
 | `docs/architecture/backend.md`      | Django apps (accounts, todos), models, auth flow, deployment           | 2026-03-25   |
 | `docs/architecture/frontend.md`     | Next.js 16 structure, Server Actions, BFF, route protection            | 2026-03-25   |
@@ -23,6 +24,8 @@ Last Updated: 2026-03-25 (initial project setup, full-stack notes app)
 
 | Decision                                    | Why                                                        | Date       |
 | ------------------------------------------- | ---------------------------------------------------------- | ---------- |
+| Global seeded categories (not per-user)    | Figma shows 3 fixed categories; simplifies the model       | 2026-03-25 |
+| djangoFetch try/catch for connection errors | Server crashes if Django is down; now returns graceful error| 2026-03-25 |
 | Email-based auth (no username field)        | Figma only shows email + password                          | 2026-03-25 |
 | BFF pattern (Server Actions proxy Django)   | Avoids CORS/cookie issues; JWT stays server-side           | 2026-03-25 |
 | Neon PostgreSQL via dj-database-url         | Cloud-hosted, serverless, falls back to SQLite locally     | 2026-03-25 |
@@ -52,6 +55,8 @@ Last Updated: 2026-03-25 (initial project setup, full-stack notes app)
 - The Django app is named `todos` but handles Notes and Categories (renamed from original todo concept)
 - `getCategoryCardStyle()` falls back to `${color}80` for unrecognized hex values — handles legacy category colors
 - Logout endpoint returns 205 (Reset Content), not 200
+- After `manage.py flush`, must run `migrate` again to re-seed default categories
+- Category name has a unique constraint — tests must use `get_or_create` or `get`, not `create` for seeded categories
 
 ---
 
