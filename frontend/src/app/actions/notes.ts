@@ -13,25 +13,6 @@ export async function getCategories(): Promise<Category[]> {
   return data || []
 }
 
-export async function createCategory(name: string, color: string): Promise<Category | null> {
-  const accessToken = await getAccessToken()
-  if (!accessToken) return null
-  const { data } = await djangoFetch<Category>('/api/categories/', {
-    method: 'POST',
-    body: JSON.stringify({ name, color }),
-    accessToken,
-  })
-  revalidatePath('/dashboard')
-  return data
-}
-
-export async function deleteCategory(id: number) {
-  const accessToken = await getAccessToken()
-  if (!accessToken) return
-  await djangoFetch(`/api/categories/${id}/`, { method: 'DELETE', accessToken })
-  revalidatePath('/dashboard')
-}
-
 export async function getNotes(categoryId?: number): Promise<Note[]> {
   const accessToken = await getAccessToken()
   if (!accessToken) return []

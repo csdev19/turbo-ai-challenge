@@ -17,6 +17,12 @@ test.describe('Notes', () => {
     await expect(page.getByText("I'm just here waiting for your charming notes...")).toBeVisible()
   })
 
+  test('shows default categories in sidebar', async ({ page }) => {
+    await expect(page.getByText('Random Thoughts')).toBeVisible()
+    await expect(page.getByText('School')).toBeVisible()
+    await expect(page.getByText('Personal')).toBeVisible()
+  })
+
   test('shows + New Note button', async ({ page }) => {
     await expect(page.getByRole('button', { name: '+ New Note' })).toBeVisible()
   })
@@ -40,22 +46,8 @@ test.describe('Notes', () => {
     // Wait for auto-save debounce
     await page.waitForTimeout(1000)
 
-    // Close and verify note appears on dashboard
+    // Close and go back to dashboard
     await page.locator('button:has(svg)').last().click()
     await page.waitForURL('/dashboard')
-
-    // Note should appear — but the close button navigates via router.push
-    // which triggers revalidation, so the note should be there
-  })
-
-  test('can create a category', async ({ page }) => {
-    await page.getByText('+ Add category').click()
-
-    await page.getByPlaceholder('Category name').fill('School')
-
-    await page.getByRole('button', { name: 'Add' }).click()
-
-    // Category should appear in sidebar
-    await expect(page.getByText('School')).toBeVisible()
   })
 })

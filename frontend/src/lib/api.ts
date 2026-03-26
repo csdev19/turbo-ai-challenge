@@ -15,10 +15,15 @@ export async function djangoFetch<T = unknown>(
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
   }
 
-  const res = await fetch(`${DJANGO_API_URL}${endpoint}`, {
-    ...fetchOptions,
-    headers,
-  })
+  let res: Response
+  try {
+    res = await fetch(`${DJANGO_API_URL}${endpoint}`, {
+      ...fetchOptions,
+      headers,
+    })
+  } catch {
+    return { data: null, error: 'Unable to connect to the server.', status: 0 }
+  }
 
   if (!res.ok) {
     const body = await res.json().catch(() => null)

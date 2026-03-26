@@ -41,12 +41,13 @@ def refresh_token(user):
 
 
 @pytest.fixture
-def category(user):
-    return Category.objects.create(
-        user=user,
+def category(db):
+    """Global category — seeded by migration, get or create."""
+    cat, _ = Category.objects.get_or_create(
         name="Random Thoughts",
-        color="#EF9C66",
+        defaults={"color": "#EF9C66"},
     )
+    return cat
 
 
 @pytest.fixture

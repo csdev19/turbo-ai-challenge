@@ -19,7 +19,7 @@ class TestNoteList:
         """Filter notes by category query param."""
         from todos.models import Category
 
-        other_cat = Category.objects.create(user=user, name="School", color="#FCDC94")
+        other_cat = Category.objects.get(name="School")
         Note.objects.create(user=user, category=other_cat, title="School Note")
 
         response = auth_client.get(f"{self.URL}?category={category.id}")
@@ -121,7 +121,7 @@ class TestNoteUpdate:
     def test_update_category(self, auth_client, note, user):
         from todos.models import Category
 
-        new_cat = Category.objects.create(user=user, name="School", color="#FCDC94")
+        new_cat = Category.objects.get(name="School")
         url = f"/api/notes/{note.id}/"
         response = auth_client.patch(url, {"category": new_cat.id})
 
